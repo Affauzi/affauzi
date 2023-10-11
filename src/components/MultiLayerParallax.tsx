@@ -1,7 +1,8 @@
-import mainBg from "../assets/bg-space.jpeg";
-import sun from "../assets/sun.png";
 import React, { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import mainBg from "../assets/bg-space.jpeg";
+import sun from "../assets/sun.png";
+import planet1 from "../assets/planet-1.png";
 
 const MultiLayerParallax = () => {
   const ref = useRef(null);
@@ -38,9 +39,8 @@ const MultiLayerParallax = () => {
         className="absolute inset-0 z-10"
         animate={{
           rotate: [0, 360],
-          animationDelay: "0.5s",
         }}
-        transition={{ repeat: Infinity, duration: 100 }}
+        transition={{ repeat: Infinity, duration: 200, ease: "linear" }}
         style={{
           backgroundSize: "contain",
           backgroundPosition: "center",
@@ -49,6 +49,18 @@ const MultiLayerParallax = () => {
           y: textY,
         }}
       />
+      <motion.div
+        className="absolute left-16 top-10 z-10"
+        style={{
+          width: 120,
+          height: 120,
+          backgroundSize: "contain",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          backgroundImage: `url(${planet1.src})`,
+          y: textY,
+        }}
+      ></motion.div>
     </div>
   );
 };
