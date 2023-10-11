@@ -10,6 +10,7 @@ import mainBg from "../assets/bg-space.jpeg";
 import sun from "../assets/sun.png";
 import planet1 from "../assets/planet-1.png";
 import planet2 from "../assets/planet-2.png";
+import planet3 from "../assets/planet-3.png";
 
 const MultiLayerParallax = () => {
   const [active, setActive] = useState<{ planet: number; active: boolean }[]>([
@@ -25,33 +26,67 @@ const MultiLayerParallax = () => {
   });
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    console.log(latest);
+    if (latest >= 0.04 && latest < 0.25) {
+      setActive((prev) => {
+        return prev.map((item) => {
+          if (item.planet === 1) {
+            return { ...item, active: true };
+          }
+          return { ...item, active: false };
+        });
+      });
+    }
+    if (latest >= 0.25 && latest < 0.5) {
+      setActive((prev) => {
+        return prev.map((item) => {
+          if (item.planet === 2) {
+            return { ...item, active: true };
+          }
+          return { ...item, active: false };
+        });
+      });
+    }
+    if (latest >= 0.5 && latest <= 0.75) {
+      setActive((prev) => {
+        return prev.map((item) => {
+          if (item.planet === 3) {
+            return { ...item, active: true };
+          }
+          return { ...item, active: false };
+        });
+      });
+    }
   });
 
   useEffect(() => {
     console.log(active);
   }, [active]);
+
   const sunY = useTransform(scrollYProgress, [0, 1], [1, 0]);
 
   const planetTransition = {
     first: {
-      scale: useTransform(scrollYProgress, [0.04, 0.25], [1, 20]),
-      opacity: useTransform(scrollYProgress, [0, 0.25], [1, 0]),
-      display: useTransform(scrollYProgress, [1, 0], ["block", "none"]),
-      top: useTransform(scrollYProgress, [0, 0.3], ["20%", "40%"]),
-      left: useTransform(scrollYProgress, [0, 0.3], ["20%", "40%"]),
+      scale: useTransform(scrollYProgress, [0.09, 0.25], [1, 20]),
+      opacity: useTransform(scrollYProgress, [0.08, 0.25], [1, 0]),
+      top: useTransform(scrollYProgress, [0, 0.06], ["10%", "50%"]),
+      left: useTransform(scrollYProgress, [0, 0.02], ["20%", "45%"]),
     },
     second: {
-      // scale: useTransform(scrollYProgress, [0.2, 1], [1, 20]),
-      // opacity: useTransform(scrollYProgress, [0, 1], [1, 0]),
-      display: useTransform(scrollYProgress, [1, 0], ["block", "none"]),
-      top: useTransform(scrollYProgress, [0, 0.3], ["80%", "20%"]),
+      scale: useTransform(scrollYProgress, [0.4, 0.5], [1, 20]),
+      opacity: useTransform(scrollYProgress, [0.4, 0.5], [1, 0]),
+      top: useTransform(scrollYProgress, [0, 0.3], ["80%", "15%"]),
       left: useTransform(scrollYProgress, [0, 0.3], ["70%", "70%"]),
+    },
+    third: {
+      scale: useTransform(scrollYProgress, [0.6, 0.73], [1, 20]),
+      opacity: useTransform(scrollYProgress, [0.6, 0.73], [1, 0]),
+      top: useTransform(scrollYProgress, [0, 0.3], ["10%", "20%"]),
+      left: useTransform(scrollYProgress, [0, 0.3], ["70%", "80%"]),
     },
   };
 
   return (
-    <div ref={ref}>
+    <div ref={ref} className="bg-gradient-to-br from-black to-zinc-800">
       <div className="w-full h-screen relative grid z-0">
         <motion.div
           style={{ y: sunY }}
@@ -76,10 +111,6 @@ const MultiLayerParallax = () => {
           />
         </motion.div>
 
-        {/* <motion.div
-        className="absolute z-20 m-auto"
-        style={{ left: planetTransition.x, top: planetTransition.y }}
-      > */}
         <div className="absolute z-30">
           <motion.img
             className="fixed top-10 left-10"
@@ -97,14 +128,13 @@ const MultiLayerParallax = () => {
             style={{
               scale: planetTransition.first.scale,
               opacity: planetTransition.first.opacity,
-              display: planetTransition.first.display,
               top: planetTransition.first.top,
               left: planetTransition.first.left,
             }}
           />
         </div>
 
-        {/* <div className="absolute z-30">
+        <div className="absolute z-30">
           <motion.img
             className="fixed top-7 left-6"
             animate={{
@@ -119,23 +149,44 @@ const MultiLayerParallax = () => {
             width={120}
             height={120}
             style={{
-              // scale: planetTransition.second.scale,
-              // opacity: planetTransition.second.opacity,
-              display: planetTransition.second.display,
+              scale: planetTransition.second.scale,
+              opacity: planetTransition.second.opacity,
               top: planetTransition.second.top,
               left: planetTransition.second.left,
             }}
           />
-        </div> */}
+        </div>
+        <div className="absolute z-30">
+          <motion.img
+            className="fixed top-7 left-6"
+            animate={{
+              rotate: [0, -45],
+            }}
+            transition={{
+              repeat: Infinity,
+              duration: 100,
+              ease: "linear",
+            }}
+            src={planet3.src}
+            width={120}
+            height={120}
+            style={{
+              scale: planetTransition.third.scale,
+              opacity: planetTransition.third.opacity,
+              top: planetTransition.third.top,
+              left: planetTransition.third.left,
+            }}
+          />
+        </div>
       </div>
-      <div className="w-full h-screen overflow-hidden relative grid place-items-center border border-black">
+      <div className="w-full h-screen overflow-hidden relative grid place-items-center">
         Testtt
       </div>
-      <div className="w-full h-screen overflow-hidden relative grid place-items-center border border-black">
+      <div className="w-full h-screen overflow-hidden relative grid place-items-center">
         Testtt 2
       </div>
-      <div className="w-full h-screen overflow-hidden relative grid place-items-center border border-black">
-        Testtt 2
+      <div className="w-full h-screen overflow-hidden relative grid place-items-center">
+        Testtt 3
       </div>
     </div>
   );
